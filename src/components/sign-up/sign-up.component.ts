@@ -83,7 +83,7 @@ export class SignUpComponent implements OnInit {
   validatePassword(): boolean {
     const password = this.registerForm.value.password;
 
-    return password.length < 6
+    return password && password.length < 6
       ? this.isPasswordLengthValid(password)
       : this.passwordHasDigitsOrCharacters(password);
   }

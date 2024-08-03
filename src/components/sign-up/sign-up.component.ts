@@ -5,7 +5,6 @@ import {
   FormGroup,
   ReactiveFormsModule,
   FormsModule,
-  Validators,
 } from "@angular/forms";
 
 @Component({
@@ -27,61 +26,123 @@ export class SignUpComponent implements OnInit {
 
   invalidEmail: string = "";
   invalidPassword: string = "";
+  noMatch: string = "";
+  unTickedTerms: string = "";
   show: boolean = false;
 
   ngOnInit(): void {}
 
-  validateEmail(): void {
+  isEmailValid(): boolean {
     const email = this.registerForm.value.email;
+    let valid = false;
 
     if (!/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/.test(email)) {
       this.invalidEmail = "Invalid email";
+      valid = false;
     } else {
       this.invalidEmail = "";
+      valid = true;
     }
+
+    return valid;
   }
 
-  checkPasswordLength(password: string): void {
+  isPasswordLengthValid(password: string): boolean {
+    let valid = false;
+
     if (password.length < 6) {
       this.invalidPassword =
         "The password should be at least 6 characters long";
+      valid = false;
     } else {
       this.invalidPassword = "";
+      valid = true;
     }
+
+    return valid;
   }
 
-  checkPasswordDigits(password: string): void {
+  passwordHasDigitsOrCharacters(password: string): boolean {
+    let valid = false;
+
     if (
       !/[0-9]/.test(password) ||
       !/[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/.test(password)
     ) {
       this.invalidPassword =
         "The password should contain at least one digit and special character";
+      valid = false;
     } else {
       this.invalidPassword = "";
+      valid = true;
     }
+
+    return valid;
   }
 
-  validatePassword(): void {
+  validatePassword(): boolean {
     const password = this.registerForm.value.password;
 
-    if (password.length < 6) {
-      this.checkPasswordLength(password);
-    } else {
-      this.checkPasswordDigits(password);
-    }
+    return password.length < 6
+      ? this.isPasswordLengthValid(password)
+      : this.passwordHasDigitsOrCharacters(password);
   }
 
   showPassword(): void {
-    if (this.show) {
-      this.show = false;
+    const password = this.registerForm.value.password;
+
+    if (password == "") {
+      this.invalidPassword = "The password can't be empty";
     } else {
-      this.show = true;
+      if (this.show) {
+        this.show = false;
+      } else {
+        this.show = true;
+      }
     }
   }
 
+  doPasswordsMatch(): boolean {
+    const { password, confirmPassword } = this.registerForm.value;
+    let valid = false;
+
+    if (password !== confirmPassword) {
+      this.noMatch = "Passwords don't match";
+      valid = false;
+    } else {
+      this.noMatch = "";
+      valid = true;
+    }
+    return valid;
+  }
+
+  isTermsTicked(): boolean {
+    const terms = this.registerForm.value.terms;
+    let valid = false;
+    if (!terms) {
+      this.unTickedTerms = "Accept the terms and conditions";
+      valid = false;
+    } else {
+      this.unTickedTerms = "";
+      valid = true;
+    }
+    return valid;
+  }
+
   register(): void {
-    this.validateEmail();
+    const { email, password, confirmPassword, terms } = this.registerForm.value;
+
+    if (
+      !this.isEmailValid() ||
+      !this.validatePassword() ||
+      !this.doPasswordsMatch() ||
+      !this.isTermsTicked()
+    ) {
+      return;
+    }
+
     console.log(this.registerForm.value);
+
+    this.registerForm.reset();
   }
 }

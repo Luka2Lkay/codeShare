@@ -27,12 +27,11 @@ export class SignUpComponent implements OnInit {
 
   invalidEmail: string = "";
   invalidPassword: string = "";
+  show: boolean = false;
 
-  ngOnInit(): void {
-    this.validatePassword();
-  }
+  ngOnInit(): void {}
 
-  validateEmail() {
+  validateEmail(): void {
     const email = this.registerForm.value.email;
 
     if (!/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/.test(email)) {
@@ -42,17 +41,46 @@ export class SignUpComponent implements OnInit {
     }
   }
 
-  validatePassword() {
-    const password = this.registerForm.value.password;
-
+  checkPasswordLength(password: string): void {
     if (password.length < 6) {
-      this.invalidPassword = "too short";
-    } else if (!/0-9/.test(password)) {
-      this.invalidPassword = "password should contain at least one digit";
+      this.invalidPassword =
+        "The password should be at least 6 characters long";
+    } else {
+      this.invalidPassword = "";
     }
   }
 
-  register() {
+  checkPasswordDigits(password: string): void {
+    if (
+      !/[0-9]/.test(password) ||
+      !/[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/.test(password)
+    ) {
+      this.invalidPassword =
+        "The password should contain at least one digit and special character";
+    } else {
+      this.invalidPassword = "";
+    }
+  }
+
+  validatePassword(): void {
+    const password = this.registerForm.value.password;
+
+    if (password.length < 6) {
+      this.checkPasswordLength(password);
+    } else {
+      this.checkPasswordDigits(password);
+    }
+  }
+
+  showPassword(): void {
+    if (this.show) {
+      this.show = false;
+    } else {
+      this.show = true;
+    }
+  }
+
+  register(): void {
     this.validateEmail();
     console.log(this.registerForm.value);
   }

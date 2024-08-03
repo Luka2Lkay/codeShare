@@ -26,8 +26,11 @@ export class SignUpComponent implements OnInit {
   });
 
   invalidEmail: string = "";
+  invalidPassword: string = "";
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.validatePassword();
+  }
 
   validateEmail() {
     const email = this.registerForm.value.email;
@@ -36,6 +39,16 @@ export class SignUpComponent implements OnInit {
       this.invalidEmail = "Invalid email";
     } else {
       this.invalidEmail = "";
+    }
+  }
+
+  validatePassword() {
+    const password = this.registerForm.value.password;
+
+    if (password.length < 6) {
+      this.invalidPassword = "too short";
+    } else if (!/0-9/.test(password)) {
+      this.invalidPassword = "password should contain at least one digit";
     }
   }
 

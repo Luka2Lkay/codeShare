@@ -17,7 +17,7 @@
                         <input formControlName="email" (change)="isEmailValid()" type="email" id="email"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="name@company.com" required="true">
-                        <p class="text-left text-red-700">{{invalidEmail}}</p>
+                        <p id="invalid-email" class="text-left text-red-700">{{invalidEmail}}</p>
                     </div>
 
                     <div>
@@ -29,7 +29,7 @@
                             class="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required="true">
                         } @else {
-                        <input formControlName="password" (change)="validatePassword()"
+                        <input formControlName="password" (change)="validatePassword()" type="text"
                             class="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         }
                         <p class="text-left mb-2 text-red-700">{{invalidPassword}}</p>

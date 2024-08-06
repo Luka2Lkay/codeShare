@@ -20,5 +20,4 @@ export class AppComponent implements OnInit {
     initializeApp(environment.firebaseConfig)
     
   }
-
 }

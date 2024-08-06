@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { RouterLink} from "@angular/router";
 import {
   FormControl,
   FormGroup,
@@ -140,8 +140,6 @@ export class SignUpComponent implements OnInit {
     ) {
       return;
     }
-
-    console.log(this.registerForm.value);
 
     this.registerForm.reset();
   }

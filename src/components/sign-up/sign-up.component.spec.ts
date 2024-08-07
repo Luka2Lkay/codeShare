@@ -20,6 +20,8 @@ describe("SignUpComponent", () => {
   let passwordInput: HTMLInputElement;
   let emailMessage: HTMLElement;
   let passwordMessage: HTMLElement;
+  let termsMessage: HTMLElement;
+  let matchMessage: HTMLElement;
   let router: Router;
 
   beforeEach(async () => {
@@ -45,6 +47,10 @@ describe("SignUpComponent", () => {
       fixture.debugElement.nativeElement.querySelector("#invalid-email");
     passwordMessage =
       fixture.debugElement.nativeElement.querySelector("#invalid-password");
+    termsMessage =
+      fixture.debugElement.nativeElement.querySelector("#unticked-terms");
+    matchMessage =
+      fixture.debugElement.nativeElement.querySelector("#no-match");
   });
 
   it("should update the email input", () => {
@@ -120,6 +126,7 @@ describe("SignUpComponent", () => {
     fixture.detectChanges();
 
     expect(component.noMatch).toBe("Passwords don't match");
+    expect(matchMessage.textContent).toBe("Passwords don't match");
   });
 
   it("should show an empty string when password and confirmPassword match", () => {
@@ -131,5 +138,28 @@ describe("SignUpComponent", () => {
     fixture.detectChanges();
 
     expect(component.noMatch).toBe("");
+    expect(matchMessage.textContent).toBe("");
+  });
+
+  it("should show an empty string when the terms checkbox has been clicked", () => {
+    component.registerForm.get("terms")?.setValue(true);
+
+    component.isTermsTicked();
+
+    fixture.detectChanges();
+
+    expect(component.unTickedTerms).toBe("");
+    expect(termsMessage.textContent).toBe("");
+  });
+
+  it("should show the relevant message when the terms checkbox has not been clicked", () => {
+    component.registerForm.get("terms")?.setValue(false);
+
+    component.isTermsTicked();
+
+    fixture.detectChanges();
+
+    expect(component.unTickedTerms).toBe("Accept the terms and conditions");
+    expect(termsMessage.textContent).toBe("Accept the terms and conditions");
   });
 });

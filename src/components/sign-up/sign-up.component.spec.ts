@@ -8,7 +8,6 @@ import {
   withInMemoryScrolling,
 } from "@angular/router";
 import { SignUpComponent } from "./sign-up.component";
-import { By } from "@angular/platform-browser";
 
 export const routes: Routes = [{ path: "sign-up", component: SignUpComponent }];
 
@@ -18,8 +17,9 @@ describe("SignUpComponent", () => {
   let htmlPage: any;
   let emailInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
-  let errorMessage: HTMLElement;
-  let showPasswordBox: HTMLElement;
+  let emailMessage: HTMLElement;
+  let checkbox: HTMLInputElement;
+  let passwordMessage: HTMLElement;
   let router: Router;
 
   beforeEach(async () => {
@@ -38,22 +38,20 @@ describe("SignUpComponent", () => {
 
     fixture.detectChanges();
 
-    emailInput = fixture.debugElement.query(
-      By.css('input[type="email"]')
-    ).nativeElement;
-
-    passwordInput = fixture.debugElement.query(
-      By.css('input[formControlName="password"]')
-    ).nativeElement;
-
-    showPasswordBox = fixture.debugElement.query(
-      By.css('input[type="checkbox"]')
-    ).nativeElement;
-  });
+    emailInput = fixture.debugElement.nativeElement.querySelector("#email");
+    passwordInput =
+      fixture.debugElement.nativeElement.querySelector("#password");
+    emailMessage =
+      fixture.debugElement.nativeElement.querySelector("#invalid-email");
+    passwordMessage =
+      fixture.debugElement.nativeElement.querySelector("#invalid-password");
+      checkbox =
+      fixture.debugElement.nativeElement.querySelector("#show-password");
+    });
 
   it("should update the email input", () => {
     const email = "luka@gmail.com";
-    component.registerForm.get("email")?.setValue(email);
+    emailInput.value = email;
 
     fixture.detectChanges();
 
@@ -62,11 +60,57 @@ describe("SignUpComponent", () => {
 
   it("should update the password input", () => {
     const password = "1asdfg#";
-    component.registerForm.get("password")?.setValue(password);
+    passwordInput.value = password;
 
     fixture.detectChanges();
 
     expect(htmlPage.querySelector("#password").value).toBe(password);
+  });
+
+  it("should show invalid email when the email is invalid", () => {
+    const invalidEmail = "Invalid email";
+    component.invalidEmail = invalidEmail;
+
+    fixture.detectChanges();
+
+    expect(emailMessage.textContent).toBe(invalidEmail);
+  });
+
+  it("should show an empty string when the email is valid", () => {
+    const validEmail = "";
+    component.invalidEmail = validEmail;
+
+    fixture.detectChanges();
+
+    expect(emailMessage.textContent).toBe(validEmail);
+  });
+
+  it("should show the relevant message when the password is missing a special character or digit", () => {
+    const invalidPassword =
+      "The password should contain at least one digit and special character";
+    component.invalidPassword = invalidPassword;
+
+    fixture.detectChanges();
+
+    expect(passwordMessage.textContent).toBe(invalidPassword);
+  });
+
+  it("should show the relevant message when the password is less than 6 characters long", () => {
+    const invalidPassword = "The password should be at least 6 characters long";
+    component.invalidPassword = invalidPassword;
+
+    fixture.detectChanges();
+
+    expect(passwordMessage.textContent).toBe(invalidPassword);
+  });
+
+  it("should show an empty string when the password is valid", () => {
+    const validPassword = "";
+    component.invalidPassword = validPassword;
+
+    fixture.detectChanges();
+
+    expect(passwordMessage.textContent).toBe(validPassword);
   });
 
 });

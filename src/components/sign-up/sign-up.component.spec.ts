@@ -8,6 +8,7 @@ import {
   withInMemoryScrolling,
 } from "@angular/router";
 import { SignUpComponent } from "./sign-up.component";
+import e from "cors";
 
 export const routes: Routes = [{ path: "sign-up", component: SignUpComponent }];
 
@@ -18,7 +19,6 @@ describe("SignUpComponent", () => {
   let emailInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
   let emailMessage: HTMLElement;
-  let checkbox: HTMLInputElement;
   let passwordMessage: HTMLElement;
   let router: Router;
 
@@ -45,9 +45,7 @@ describe("SignUpComponent", () => {
       fixture.debugElement.nativeElement.querySelector("#invalid-email");
     passwordMessage =
       fixture.debugElement.nativeElement.querySelector("#invalid-password");
-      checkbox =
-      fixture.debugElement.nativeElement.querySelector("#show-password");
-    });
+  });
 
   it("should update the email input", () => {
     const email = "luka@gmail.com";
@@ -113,4 +111,25 @@ describe("SignUpComponent", () => {
     expect(passwordMessage.textContent).toBe(validPassword);
   });
 
+  it("should show the relavant message when the password and confirmPassword do not match do match", () => {
+    component.registerForm.value.password = "1abcdefg#";
+    component.registerForm.value.confirmPassword = "1asfdg#";
+
+    component.doPasswordsMatch();
+
+    fixture.detectChanges();
+
+    expect(component.noMatch).toBe("Passwords don't match");
+  });
+
+  it("should show an empty string when password and confirmPassword match", () => {
+    component.registerForm.value.password = "1asfdg#";
+    component.registerForm.value.confirmPassword = "1asfdg#";
+
+    component.doPasswordsMatch();
+
+    fixture.detectChanges();
+
+    expect(component.noMatch).toBe("");
+  });
 });

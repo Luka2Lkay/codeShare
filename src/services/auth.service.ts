@@ -1,21 +1,29 @@
-import { Injectable} from '@angular/core';
-import {getAuth, createUserWithEmailAndPassword, updateProfile} from '@firebase/auth'
-import { Register } from '../interfaces/register';
-import { Observable } from 'rxjs';
-
+import { Injectable } from "@angular/core";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "@firebase/auth";
+import { Register } from "../interfaces/register";
+import { from, Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthService {
+  constructor() {}
 
-  constructor() { }
+  auth = getAuth();
 
-  auth = getAuth()
+  register(data: Register): Observable<void> {
+    const newUser = createUserWithEmailAndPassword(
+      this.auth,
+      data.email,
+      data.password
+    ).then((response) => {
+      updateProfile(response.user, { displayName: data.userName });
+    });
 
-  // register(data: Register): Observable<void> {
-  //   const newUser =  createUserWithEmailAndPassword(this.auth, data.email, data.password).then(response => {
-  //     updateProfile(response.user, )
-  //   })
-  // }
+    return from(newUser);
+  }
 }

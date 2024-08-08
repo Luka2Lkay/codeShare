@@ -1,11 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { RouterLink, Router } from "@angular/router";
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   FormsModule,
 } from "@angular/forms";
+import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: "app-sign-up",
@@ -15,7 +16,7 @@ import {
   styleUrl: "./sign-up.component.css",
 })
 export class SignUpComponent implements OnInit {
-  constructor() {}
+  constructor(private _auth: AuthService, private _router: Router) {}
 
   registerForm: FormGroup = new FormGroup({
     userName: new FormControl(""),
@@ -156,7 +157,13 @@ export class SignUpComponent implements OnInit {
       return;
     }
 
-    console.log(this.registerForm.value);
+    this._auth.register(this.registerForm.value).subscribe({
+      next: () => {
+        this._router.navigate(["/timeline"])
+      },
+      error: console.log,
+    });
+
     this.registerForm.reset();
   }
 }

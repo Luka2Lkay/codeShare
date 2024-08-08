@@ -8,8 +8,7 @@ import {
   withInMemoryScrolling,
 } from "@angular/router";
 import { SignUpComponent } from "./sign-up.component";
-import e from "cors";
-import { EMPTY } from "rxjs";
+import { AuthService } from "../../services/auth.service";
 
 export const routes: Routes = [{ path: "sign-up", component: SignUpComponent }];
 
@@ -28,7 +27,7 @@ describe("SignUpComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SignUpComponent, RouterLink, ReactiveFormsModule, FormsModule],
+      imports: [SignUpComponent, RouterLink, ReactiveFormsModule, FormsModule, AuthService, Router],
       providers: [provideRouter(routes, withInMemoryScrolling())],
     }).compileComponents();
   });

@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { RouterLink} from "@angular/router";
+import { RouterLink } from "@angular/router";
 import {
   FormControl,
   FormGroup,
@@ -18,12 +18,14 @@ export class SignUpComponent implements OnInit {
   constructor() {}
 
   registerForm: FormGroup = new FormGroup({
+    userName: new FormControl(""),
     email: new FormControl(""),
     password: new FormControl(""),
     confirmPassword: new FormControl(""),
     terms: new FormControl(false),
   });
 
+  emptyUserName: string = "";
   invalidEmail: string = "";
   invalidPassword: string = "";
   noMatch: string = "";
@@ -31,6 +33,20 @@ export class SignUpComponent implements OnInit {
   show: boolean = false;
 
   ngOnInit(): void {}
+
+  isUserNameValid(name: string): boolean {
+    let valid = false;
+
+    if (name === "") {
+      this.emptyUserName = "Enter username";
+      valid = false;
+    } else {
+      this.emptyUserName = "";
+      valid = true;
+    }
+
+    return valid;
+  }
 
   isEmailValid(): boolean {
     const email = this.registerForm.value.email;
@@ -43,7 +59,6 @@ export class SignUpComponent implements OnInit {
       this.invalidEmail = "";
       valid = true;
     }
-
     return valid;
   }
 
@@ -58,7 +73,6 @@ export class SignUpComponent implements OnInit {
       this.invalidPassword = "";
       valid = true;
     }
-
     return valid;
   }
 
@@ -76,7 +90,6 @@ export class SignUpComponent implements OnInit {
       this.invalidPassword = "";
       valid = true;
     }
-
     return valid;
   }
 
@@ -130,17 +143,20 @@ export class SignUpComponent implements OnInit {
   }
 
   register(): void {
-    const { email, password, confirmPassword, terms } = this.registerForm.value;
+    const { userName, email, password, confirmPassword, terms } =
+      this.registerForm.value;
 
     if (
-      !this.isEmailValid() ||
+      !this.isUserNameValid(userName) ||
       !this.validatePassword() ||
       !this.doPasswordsMatch() ||
       !this.isTermsTicked()
     ) {
+      this.isUserNameValid(userName);
       return;
     }
 
+    console.log(this.registerForm.value);
     this.registerForm.reset();
   }
 }

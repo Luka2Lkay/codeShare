@@ -9,6 +9,7 @@ import {
 } from "@angular/router";
 import { SignUpComponent } from "./sign-up.component";
 import e from "cors";
+import { EMPTY } from "rxjs";
 
 export const routes: Routes = [{ path: "sign-up", component: SignUpComponent }];
 
@@ -19,6 +20,7 @@ describe("SignUpComponent", () => {
   let emailInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
   let emailMessage: HTMLElement;
+  let userNameMessage: HTMLElement;
   let passwordMessage: HTMLElement;
   let termsMessage: HTMLElement;
   let matchMessage: HTMLElement;
@@ -51,6 +53,8 @@ describe("SignUpComponent", () => {
       fixture.debugElement.nativeElement.querySelector("#unticked-terms");
     matchMessage =
       fixture.debugElement.nativeElement.querySelector("#no-match");
+    userNameMessage =
+      fixture.debugElement.nativeElement.querySelector("#empty-username");
   });
 
   it("should update the email input", () => {
@@ -87,6 +91,26 @@ describe("SignUpComponent", () => {
     fixture.detectChanges();
 
     expect(emailMessage.textContent).toBe(validEmail);
+  });
+
+  it("should show 'Enter username' when the username field is empty", () => {
+    component.registerForm.value.userName = "";
+
+    component.isUserNameValid(component.registerForm.value.userName);
+
+    fixture.detectChanges();
+
+    expect(userNameMessage.textContent).toBe("Enter username");
+  });
+
+  it("should not show error message when the username field is not empty", () => {
+    component.registerForm.value.userName = "Luka";
+
+    component.isUserNameValid(component.registerForm.value.userName);
+
+    fixture.detectChanges();
+
+    expect(userNameMessage.textContent).toBe("");
   });
 
   it("should show the relevant message when the password is missing a special character or digit", () => {

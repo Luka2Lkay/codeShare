@@ -1,4 +1,7 @@
 import { Injectable } from "@angular/core";
+import { initializeApp } from "firebase/app";
+import { environment } from "../environments/environment.development";
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -13,7 +16,7 @@ import { from, Observable } from "rxjs";
 export class AuthService {
   constructor() {}
 
-  auth = getAuth();
+  auth = getAuth(initializeApp(environment.firebaseConfig));
 
   register(data: Register): Observable<void> {
     const newUser = createUserWithEmailAndPassword(

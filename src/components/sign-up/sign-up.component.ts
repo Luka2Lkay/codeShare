@@ -144,8 +144,7 @@ export class SignUpComponent implements OnInit {
   }
 
   register(): void {
-    const { userName, email, password, confirmPassword, terms } =
-      this.registerForm.value;
+    const userName = this.registerForm.value.userName;
 
     if (
       !this.isUserNameValid(userName) ||
@@ -159,7 +158,7 @@ export class SignUpComponent implements OnInit {
 
     this._auth.register(this.registerForm.value).subscribe({
       next: () => {
-        this._router.navigate(["/timeline"])
+        this._router.navigate(["/timeline"]);
       },
       error: console.log,
     });

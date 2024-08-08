@@ -6,10 +6,12 @@ import {
   Routes,
   provideRouter,
   withInMemoryScrolling,
+  RouterModule,
 } from "@angular/router";
-import { SignUpComponent } from "./sign-up.component";
 import { AuthService } from "../../services/auth.service";
-
+import { SignUpComponent } from "./sign-up.component";
+import { of } from "rxjs";
+import { ɵsetEnsureDirtyViewsAreAlwaysReachable } from '@angular/core';
 export const routes: Routes = [{ path: "sign-up", component: SignUpComponent }];
 
 describe("SignUpComponent", () => {
@@ -25,10 +27,24 @@ describe("SignUpComponent", () => {
   let matchMessage: HTMLElement;
   let router: Router;
 
+  let authSpy: jasmine.SpyObj<AuthService>;
+
+
+
   beforeEach(async () => {
+    authSpy = jasmine.createSpyObj("AuthService", ["register"]);
+   
     await TestBed.configureTestingModule({
-      imports: [SignUpComponent, RouterLink, ReactiveFormsModule, FormsModule, AuthService, Router],
-      providers: [provideRouter(routes, withInMemoryScrolling())],
+      imports: [
+        SignUpComponent,
+        RouterLink,
+        ReactiveFormsModule,
+        FormsModule
+      ],
+      providers: [
+        provideRouter(routes, withInMemoryScrolling()),
+        { provide: AuthService, useValue: authSpy },
+      ],
     }).compileComponents();
   });
 

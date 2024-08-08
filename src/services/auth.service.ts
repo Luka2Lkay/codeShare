@@ -14,6 +14,7 @@ import { from, Observable } from "rxjs";
   providedIn: "root",
 })
 export class AuthService {
+  
   constructor() {}
 
   auth = getAuth(initializeApp(environment.firebaseConfig));
